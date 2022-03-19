@@ -17,6 +17,13 @@ function obsKeysToString(o, k, sep) {
 		.filter((v) => v)
 		.join(sep);
 }
+function insertKey(key, value, obj, pos) {
+	return Object.keys(obj).reduce((ac, a, i) => {
+		if (i === pos) ac[key] = value;
+		ac[a] = obj[a];
+		return ac;
+	}, {});
+}
 document.querySelector("#signup-form .actions ul li:last-child a").onclick =
 	function () {
 		let newMedicalForm = new MedicalForm();
@@ -29,11 +36,17 @@ document.querySelector("#signup-form .actions ul li:last-child a").onclick =
 			let { value, id } = e;
 			newMedicalForm[id] = value;
 		});
-		newMedicalForm.ngaySinh = obsKeysToString(
+		newMedicalForm = insertKey(
+			"ngaySinh",
+			obsKeysToString(newMedicalForm, ["ngay", "thang", "nam"], "/"),
 			newMedicalForm,
-			["ngay", "thang", "nam"],
-			"/"
+			2
 		);
+		// newMedicalForm.ngaySinh = obsKeysToString(
+		// 	newMedicalForm,
+		// 	["ngay", "thang", "nam"],
+		// 	"/"
+		// );
 
 		console.log(newMedicalForm);
 		let strOutput = "";
